@@ -1,17 +1,18 @@
 use md5::{Md5, Digest};
-use std::io::{self, Write};
+use std::env;
 
 fn main() {
-    // Prompt the user for input
-    print!("Enter a string to hash: ");
-    io::stdout().flush().unwrap(); // Ensure the prompt is printed before reading input
+    // Collect the command-line arguments
+    let args: Vec<String> = env::args().collect();
 
-    // Read input from the user
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).expect("Failed to read line");
+    // Check if an argument is provided
+    if args.len() < 2 {
+        eprintln!("Usage: {} <string to hash>", args[0]);
+        std::process::exit(1);
+    }
 
-    // Remove the newline character from the input
-    let input = input.trim();
+    // Get the input string from the first argument
+    let input = &args[1];
 
     // Create a new MD5 hasher
     let mut hasher = Md5::new();
@@ -26,5 +27,5 @@ fn main() {
     let hex_result = format!("{:x}", result);
 
     // Print the MD5 hash result
-    println!("MD5 hash: {}", hex_result);
+    println!("{}", hex_result);
 }
